@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="6dp">
+
+    <Button
+        android:id="@+id/btnNumber"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="1"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_number_button"
+        android:stateListAnimator="@null"
+        android:elevation="0dp"/>
+</FrameLayout>

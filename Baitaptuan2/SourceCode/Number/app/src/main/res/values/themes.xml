@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme.Number" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/red_600</item>
+        <item name="colorOnPrimary">@color/on_red</item>
+        <item name="colorSecondary">@color/red_700</item>
+        <item name="colorOnSecondary">@color/on_red</item>
+        <!-- tùy chọn: -->
+        <item name="colorTertiary">@color/red_600</item>
+    </style>
+</resources>

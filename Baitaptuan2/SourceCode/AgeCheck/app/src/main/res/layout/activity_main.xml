@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="THỰC HÀNH 01"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Khung nhập (giữa màn) -->
+    <LinearLayout
+        android:id="@+id/formCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/bg_panel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Họ và tên"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/edtName"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:hint="Nhập tên"
+                android:paddingHorizontal="10dp"
+                android:background="@android:drawable/edit_text" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tuổi"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/edtAge"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:hint="Nhập tuổi"
+                android:inputType="number"
+                android:paddingHorizontal="10dp"
+                android:background="@android:drawable/edit_text"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Nút kiểm tra -->
+    <Button
+        android:id="@+id/btnCheck"
+        android:layout_width="140dp"
+        android:layout_height="44dp"
+        android:text="Kiểm tra"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_blue_button"
+        android:backgroundTint="@null"
+        app:layout_constraintTop_toBottomOf="@id/formCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Kết quả -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/btnCheck"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thực hành 02"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Ô nhập email -->
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:imeOptions="actionDone"
+        android:paddingHorizontal="12dp"
+        android:backgroundTint="@null"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnCheck"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="12dp" />
+
+    <!-- Nút kiểm tra (màu xanh dương) -->
+    <Button
+        android:id="@+id/btnCheck"
+        android:layout_width="96dp"
+        android:layout_height="44dp"
+        android:text="Kiểm tra"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_blue_pill"
+        android:backgroundTint="@null"
+        app:layout_constraintTop_toTopOf="@id/edtEmail"
+        app:layout_constraintBottom_toBottomOf="@id/edtEmail"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Thông báo -->
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#D32F2F"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/edtEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
