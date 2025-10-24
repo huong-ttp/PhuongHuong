@@ -45,6 +45,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.text.selection.DisableSelection
 
 // ---------- result để hiện tóm tắt ở màn đầu ----------
 data class FlowResult(val email: String, val code: String, val password: String) : Serializable
@@ -200,7 +201,8 @@ fun OtpInput(
     onCodeChange: (String) -> Unit,
     onFilled: (String) -> Unit
 ) {
-    val values = remember { MutableList(length) { "" } }
+    // dùng SnapshotStateList để trigger recomposition khi thay từng phần tử
+    val values = remember { mutableStateListOf<String>().apply { repeat(length) { add("") } } }
     val focusManager = LocalFocusManager.current
     val requesters = remember { List(length) { FocusRequester() } }
 
@@ -217,61 +219,64 @@ fun OtpInput(
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(length) { i ->
-            OutlinedTextField(
-                value = values[i],
-                onValueChange = { txt ->
-                    val filtered = txt.filter(Char::isDigit).take(1) // 1 số/ô
-                    values[i] = filtered
-                    val code = codeNow()
-                    onCodeChange(code)
-
-                    if (filtered.isNotEmpty()) {
-                        if (i < length - 1) requesters[i + 1].requestFocus()
-                        else {
-                            focusManager.clearFocus()
-                            onFilled(code)
-                        }
-                    }
-                },
-                singleLine = true,
-                // đảm bảo chữ hiện rõ bằng cách đặt màu trong textStyle
-                textStyle = TextStyle(
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.Black
-                ),
-                modifier = Modifier
-                    .weight(1f)
-                    .height(58.dp)
-                    .focusRequester(requesters[i])
-                    .onKeyEvent { ev ->
-                        // kiểm tra Backspace: so sánh nativeKeyEvent.keyCode với KEYCODE_DEL
-                        val keyCode = ev.nativeKeyEvent.keyCode
-                        if (keyCode == AndroidKeyEvent.KEYCODE_DEL && values[i].isEmpty() && i > 0) {
-                            requesters[i - 1].requestFocus()
-                            values[i - 1] = ""
-                            onCodeChange(codeNow())
-                            true
-                        } else false
-                    },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = if (i == length - 1) ImeAction.Done else ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { if (i < length - 1) requesters[i + 1].requestFocus() },
-                    onDone = {
+            // Tắt selection highlight để tránh caret kỳ lạ trên một số devices
+            DisableSelection {
+                OutlinedTextField(
+                    value = values[i],
+                    onValueChange = { txt ->
+                        val filtered = txt.filter(Char::isDigit).take(1) // 1 số/ô
+                        values[i] = filtered
                         val code = codeNow()
-                        if (code.length == length) onFilled(code)
-                    }
-                ),
-                shape = RoundedCornerShape(12.dp)
-            )
+                        onCodeChange(code)
+
+                        if (filtered.isNotEmpty()) {
+                            if (i < length - 1) requesters[i + 1].requestFocus()
+                            else {
+                                focusManager.clearFocus()
+                                onFilled(code)
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    // đảm bảo chữ hiện rõ bằng cách đặt màu trong textStyle
+                    textStyle = TextStyle(
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(58.dp)
+                        .focusRequester(requesters[i])
+                        .onKeyEvent { ev ->
+                            // dùng nativeKeyEvent để detect backspace (KEYCODE_DEL)
+                            val code = ev.nativeKeyEvent.keyCode
+                            if (code == AndroidKeyEvent.KEYCODE_DEL && values[i].isEmpty() && i > 0) {
+                                requesters[i - 1].requestFocus()
+                                values[i - 1] = ""
+                                onCodeChange(codeNow())
+                                true
+                            } else false
+                        },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = if (i == length - 1) ImeAction.Done else ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { if (i < length - 1) requesters[i + 1].requestFocus() },
+                        onDone = {
+                            val code = codeNow()
+                            if (code.length == length) onFilled(code)
+                        }
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                )
+            }
         }
     }
 }
 
-// ---------- 1) Forgot (không có app bar) ----------
+// ---------- 1) Forgot----------
 @Composable
 fun ForgotPasswordScreen(
     result: FlowResult?,
@@ -330,14 +335,14 @@ fun ForgotPasswordScreen(
                     Spacer(Modifier.height(6.dp))
                     Text("Email: ${result.email}")
                     Text("Code : ${result.code}")
-                    Text("Password: ${"*".repeat(result.password.length)}")
+                    Text("Password: ${result.password}")
                 }
             }
         }
     }
 }
 
-// ---------- 2) Verify (chỉ có back) ----------
+// ---------- 2) Verify----------
 @Composable
 fun VerifyCodeScreen(
     email: String,
@@ -387,7 +392,7 @@ fun VerifyCodeScreen(
     }
 }
 
-// ---------- 3) Reset password (chỉ back + mắt ẩn/hiện) ----------
+// ---------- 3) Reset password----------
 @Composable
 fun ResetPasswordScreen(
     onBack: () -> Unit,
@@ -465,7 +470,7 @@ fun ResetPasswordScreen(
     }
 }
 
-// ---------- 4) Confirm (chỉ back) ----------
+// ---------- 4) Confirm----------
 @Composable
 fun ConfirmScreen(
     email: String,
@@ -501,7 +506,7 @@ fun ConfirmScreen(
             Spacer(Modifier.height(10.dp))
             OutlinedTextField(
                 value = "*".repeat(password.length), onValueChange = {}, readOnly = true,
-                label = { Text("Password (hidden)") }, modifier = Modifier.fillMaxWidth()
+                label = { Text("Password") }, modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.height(20.dp))
